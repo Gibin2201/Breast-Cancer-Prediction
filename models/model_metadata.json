@@ -1,7 +1,7 @@
 {
     "model_name": "Support Vector Machine",
     "selection_reason": "Automatically selected 'Support Vector Machine' as the optimal classifier because it achieved the Highest Test Accuracy (98.25%) among all evaluated algorithms, along with 97.62% Malignant Recall, 97.62% F1-Score, and 0.9954 ROC-AUC.",
-    "trained_at": "2026-11-16 12:19:16",
+    "trained_at": "2026-11-16 15:34:47",
     "dataset_info": {
         "source": "UCI Machine Learning Repository (Official ZIP)",
         "details": "Downloaded directly from UCI archive (https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic).",

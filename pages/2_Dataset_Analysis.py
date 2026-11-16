@@ -110,12 +110,20 @@ def render_dataset_analysis_page():
             "Filter, sort, or inspect individual biopsy records."
         )
 
-        filter_col1, filter_col2 = st.columns([3, 7])
+        filter_col1, filter_col2, filter_col3 = st.columns([3, 4, 3])
         with filter_col1:
             diag_filter = st.selectbox(
                 "Filter by Diagnosis:",
                 options=["All Records", "Benign (B)", "Malignant (M)"],
             )
+        with filter_col2:
+            view_mode = st.radio(
+                "Slice Mode:",
+                options=["Full Cohort", "Top Rows (df.head())", "Bottom Rows (df.tail())"],
+                horizontal=True,
+            )
+        with filter_col3:
+            num_rows = st.number_input("Record Count (N):", min_value=1, max_value=50, value=5, step=1)
 
         filtered_df = df.copy()
         if diag_filter == "Benign (B)":
@@ -123,7 +131,18 @@ def render_dataset_analysis_page():
         elif diag_filter == "Malignant (M)":
             filtered_df = filtered_df[filtered_df[TARGET_COLUMN].isin(["M", 1, "Malignant"])]
 
-        st.dataframe(filtered_df, use_container_width=True, height=320)
+        # Apply head() or tail() based on user selection
+        if "head" in view_mode.lower():
+            display_df = filtered_df.head(int(num_rows))
+            st.caption(f"🔍 Displaying top **{len(display_df)}** records via Pandas `df.head({num_rows})`")
+        elif "tail" in view_mode.lower():
+            display_df = filtered_df.tail(int(num_rows))
+            st.caption(f"🔍 Displaying bottom **{len(display_df)}** records via Pandas `df.tail({num_rows})`")
+        else:
+            display_df = filtered_df
+            st.caption(f"🔍 Displaying all **{len(display_df)}** records")
+
+        st.dataframe(display_df, use_container_width=True, height=320)
 
         # Download CSV Button
         csv_data = df.to_csv(index=False).encode("utf-8")
