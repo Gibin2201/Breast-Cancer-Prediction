@@ -81,7 +81,7 @@ def main():
         )
     with c3:
         st.markdown(
-            render_metric_card("Optimal Algorithm", f"{model_meta.get('model_name', 'N/A')}", "Selected by CV Recall", "#8b5cf6"),
+            render_metric_card("Optimal Algorithm", f"{model_meta.get('model_name', 'N/A')}", "Highest Test Accuracy", "#8b5cf6"),
             unsafe_allow_html=True,
         )
     with c4:
