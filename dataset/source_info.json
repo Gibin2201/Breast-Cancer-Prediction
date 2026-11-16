@@ -1,0 +1,10 @@
+{
+    "source_name": "UCI Machine Learning Repository (Official ZIP)",
+    "details": "Downloaded directly from UCI archive (https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic).",
+    "is_fallback": false,
+    "downloaded_at": "2026-11-16 11:41:56",
+    "records": 569,
+    "features": 30,
+    "target_column": "diagnosis",
+    "status": "Validated successfully"
+}
