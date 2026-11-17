@@ -152,22 +152,25 @@ RANDOM_SEED = 42
 TEST_SIZE = 0.20
 CV_FOLDS = 5
 
-# Styling Palettes (Navy, Teal, Blue, Light)
+# Healthcare SaaS Theme Palettes
+# Primary: Deep Navy (#142D4E), Secondary: Medical Blue (#2878C7), Accent: Teal (#16A6A1)
+# Background: Light Grey (#F5F7FA), Cards: White (#FFFFFF), Text: Dark Slate (#253247)
 THEME_COLORS = {
-    "primary": "#0d9488",         # Teal
-    "primary_dark": "#0f766e",
-    "secondary": "#2563eb",       # Blue
-    "navy": "#0f172a",            # Dark Navy
-    "navy_light": "#1e293b",
-    "background": "#f8fafc",      # Clean Slate Light
-    "card_bg": "#ffffff",
-    "text": "#0f172a",
-    "text_muted": "#64748b",
-    "benign": "#10b981",          # Emerald Green
-    "benign_bg": "#ecfdf5",
-    "benign_border": "#a7f3d0",
-    "malignant": "#ef4444",       # Crimson Warning
-    "malignant_bg": "#fef2f2",
-    "malignant_border": "#fecaca",
-    "border": "#e2e8f0",
+    "primary": "#142D4E",         # Deep Navy
+    "primary_dark": "#0B1D33",
+    "secondary": "#2878C7",       # Medical Blue
+    "accent": "#16A6A1",          # Teal Accent
+    "navy": "#142D4E",
+    "navy_light": "#1D3B63",
+    "background": "#F5F7FA",      # Light Grey
+    "card_bg": "#FFFFFF",         # Pure White Card
+    "text": "#253247",            # Dark Slate
+    "text_muted": "#5A6E85",      # Subtle Slate
+    "border": "#E2E8F0",          # Soft Border
+    "benign": "#10B981",          # Clinical Green
+    "benign_bg": "#E8F8F5",       # Soft Emerald Tint
+    "benign_border": "#A7F3D0",
+    "malignant": "#E63946",       # Clinical Warning Red
+    "malignant_bg": "#FEE8E8",    # Soft Rose Tint
+    "malignant_border": "#FECACA",
 }

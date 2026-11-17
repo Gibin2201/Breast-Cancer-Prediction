@@ -1,7 +1,14 @@
 """
-Visualization Module for Breast Cancer Prediction.
-Generates responsive, interactive Plotly visualizations for EDA, model comparison,
-confusion matrices, and ROC curves using the healthcare-inspired color palette.
+Visualization Module for Breast Cancer Prediction System.
+Generates responsive, interactive Plotly visualizations for EDA, model benchmarking,
+confusion matrices, ROC curves, and radar charts matching the Healthcare SaaS palette:
+- Primary: Deep Navy (#142D4E)
+- Secondary: Medical Blue (#2878C7)
+- Accent: Teal (#16A6A1)
+- Benign: Clinical Green (#10B981)
+- Malignant: Warning Red (#E63946)
+- Background: #FFFFFF / #F5F7FA
+- Text: #253247
 """
 
 from typing import List, Dict, Any, Optional
@@ -17,54 +24,52 @@ from config import (
 )
 
 
-# Healthcare High-Contrast Theme Plotly Template
 def _apply_theme(fig: go.Figure, title: str = "", height: int = 460) -> go.Figure:
-    """Apply consistent high-contrast typography and theme styling to Plotly figures."""
+    """Apply consistent healthcare SaaS typography and theme styling to Plotly figures."""
     fig.update_layout(
         title={
             "text": f"<b>{title}</b>",
-            "font": {"size": 18, "family": "Inter, system-ui, sans-serif", "color": "#0f172a"},
+            "font": {"size": 17, "family": "Inter, system-ui, sans-serif", "color": "#142D4E"},
             "x": 0.02,
             "y": 0.95,
         },
-        paper_bgcolor="#ffffff",
-        plot_bgcolor="#ffffff",
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
         height=height,
         margin={"l": 55, "r": 35, "t": 65, "b": 55},
-        font={"family": "Inter, system-ui, sans-serif", "color": "#0f172a", "size": 13},
+        font={"family": "Inter, system-ui, sans-serif", "color": "#253247", "size": 12},
         legend={
             "orientation": "h",
             "yanchor": "bottom",
             "y": 1.02,
             "xanchor": "right",
             "x": 1,
-            "font": {"size": 13, "color": "#0f172a"},
+            "font": {"size": 12, "color": "#253247"},
         },
     )
     fig.update_xaxes(
         showgrid=True,
-        gridwidth=1.5,
-        gridcolor="#e2e8f0",
+        gridwidth=1,
+        gridcolor="#E2E8F0",
         zeroline=False,
-        tickfont=dict(size=12, color="#0f172a"),
-        title_font=dict(size=13, color="#0f172a"),
+        tickfont=dict(size=11, color="#253247"),
+        title_font=dict(size=12, color="#142D4E"),
     )
     fig.update_yaxes(
         showgrid=True,
-        gridwidth=1.5,
-        gridcolor="#e2e8f0",
+        gridwidth=1,
+        gridcolor="#E2E8F0",
         zeroline=False,
-        tickfont=dict(size=12, color="#0f172a"),
-        title_font=dict(size=13, color="#0f172a"),
+        tickfont=dict(size=11, color="#253247"),
+        title_font=dict(size=12, color="#142D4E"),
     )
     return fig
 
 
 def plot_diagnosis_distribution(df: pd.DataFrame) -> go.Figure:
-    """Interactive Donut and Bar chart for Benign vs Malignant cases."""
+    """Interactive Donut chart for Benign vs Malignant cases with center KPI annotation."""
     target_series = df[TARGET_COLUMN]
-    
-    # Standardize labels
+
     if target_series.dtype == object:
         counts = target_series.replace({"B": "Benign", "M": "Malignant"}).value_counts()
     else:
@@ -72,7 +77,7 @@ def plot_diagnosis_distribution(df: pd.DataFrame) -> go.Figure:
 
     labels = counts.index.tolist()
     values = counts.values.tolist()
-    
+
     colors = [
         THEME_COLORS["benign"] if l == "Benign" else THEME_COLORS["malignant"]
         for l in labels
@@ -83,10 +88,10 @@ def plot_diagnosis_distribution(df: pd.DataFrame) -> go.Figure:
             go.Pie(
                 labels=labels,
                 values=values,
-                hole=0.55,
-                marker=dict(colors=colors, line=dict(color="#ffffff", width=2)),
+                hole=0.62,
+                marker=dict(colors=colors, line=dict(color="#FFFFFF", width=3)),
                 textinfo="label+percent+value",
-                textfont=dict(size=14, color="#ffffff"),
+                textfont=dict(size=13, color="#FFFFFF", family="Inter"),
                 hoverinfo="label+value+percent",
             )
         ]
@@ -95,22 +100,19 @@ def plot_diagnosis_distribution(df: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         annotations=[
             dict(
-                text=f"Total<br><b>{len(df)}</b>",
+                text=f"<span style='font-size:12px;color:#5A6E85;'>TOTAL COHORT</span><br><b style='font-size:24px;color:#142D4E;'>{len(df)}</b>",
                 x=0.5,
                 y=0.5,
-                font_size=18,
                 showarrow=False,
-                font_color=THEME_COLORS["navy"],
             )
         ]
     )
-    return _apply_theme(fig, "Tumor Diagnosis Distribution (WDBC Cohort)", height=380)
+    return _apply_theme(fig, "Tumor Biopsy Diagnosis Distribution", height=380)
 
 
 def plot_correlation_heatmap(df: pd.DataFrame, features: Optional[List[str]] = None) -> go.Figure:
-    """Generate interactive correlation heatmap for selected feature subset."""
+    """Generate interactive correlation heatmap using the clinical divergent palette."""
     if features is None:
-        # Default to 10 mean features for readability
         features = [col for col in df.columns if col.startswith("mean ")]
 
     corr = df[features].corr()
@@ -122,19 +124,19 @@ def plot_correlation_heatmap(df: pd.DataFrame, features: Optional[List[str]] = N
             x=clean_labels,
             y=clean_labels,
             colorscale=[
-                [0.0, "#1e3a8a"],
-                [0.5, "#ffffff"],
-                [1.0, "#0f766e"],
+                [0.0, "#142D4E"],   # Deep Navy
+                [0.5, "#FFFFFF"],   # White neutral
+                [1.0, "#16A6A1"],   # Teal
             ],
             zmin=-1.0,
             zmax=1.0,
             text=np.round(corr.values, 2),
             texttemplate="%{text}",
-            textfont={"size": 11, "color": "#0f172a"},
-            colorbar=dict(title="Correlation", thickness=16, tickfont=dict(size=12, color="#0f172a")),
+            textfont={"size": 10, "color": "#253247", "family": "Inter"},
+            colorbar=dict(title="Pearson r", thickness=14, tickfont=dict(size=11, color="#253247")),
         )
     )
-    return _apply_theme(fig, "Feature Pearson Correlation Heatmap", height=540)
+    return _apply_theme(fig, "Feature Pearson Correlation Matrix", height=520)
 
 
 def plot_feature_distribution(df: pd.DataFrame, feature_col: str) -> go.Figure:
@@ -153,14 +155,14 @@ def plot_feature_distribution(df: pd.DataFrame, feature_col: str) -> go.Figure:
         color="Diagnosis",
         marginal="box",
         barmode="overlay",
-        opacity=0.65,
+        opacity=0.68,
         color_discrete_map={
             "Benign": THEME_COLORS["benign"],
             "Malignant": THEME_COLORS["malignant"],
         },
         labels={feature_col: display_name},
     )
-    return _apply_theme(fig, f"Distribution: {display_name} by Diagnosis", height=420)
+    return _apply_theme(fig, f"Morphological Distribution: {display_name}", height=420)
 
 
 def plot_box_comparison(df: pd.DataFrame, features: List[str]) -> go.Figure:
@@ -179,19 +181,19 @@ def plot_box_comparison(df: pd.DataFrame, features: List[str]) -> go.Figure:
             fig.add_trace(
                 go.Box(
                     y=subset,
-                    name=f"{disp_name} ({diag})",
+                    name=f"{disp_name} ({diag[:3]})",
                     marker_color=color,
                     boxmean=True,
                 )
             )
 
-    return _apply_theme(fig, "Tumor Morphological Variations (Box Plots)", height=450)
+    return _apply_theme(fig, "Cell Nucleus Morphological Variance (Box Plots)", height=450)
 
 
 def plot_scatter_features(
     df: pd.DataFrame, feature_x: str, feature_y: str, feature_size: Optional[str] = None
 ) -> go.Figure:
-    """2D / 3D Scatter plot showing class separation across key features."""
+    """2D Scatter plot showing class separation across key features."""
     df_copy = df.copy()
     if df_copy[TARGET_COLUMN].dtype == object:
         df_copy["Diagnosis"] = df_copy[TARGET_COLUMN].replace({"B": "Benign", "M": "Malignant"})
@@ -212,13 +214,14 @@ def plot_scatter_features(
             "Malignant": THEME_COLORS["malignant"],
         },
         labels={feature_x: disp_x, feature_y: disp_y},
-        hover_data=df_copy.columns[:5],
+        hover_data=[c for c in df_copy.columns[:4]],
     )
-    return _apply_theme(fig, f"Bi-variate Separation: {disp_x} vs. {disp_y}", height=450)
+    fig.update_traces(marker=dict(line=dict(width=0.8, color="#FFFFFF"), opacity=0.85))
+    return _apply_theme(fig, f"Bi-Variate Boundary Separation: {disp_x} vs. {disp_y}", height=450)
 
 
 def plot_model_comparison_bars(comparison_df: pd.DataFrame) -> go.Figure:
-    """Multi-metric bar chart comparing all 5 algorithms side by side."""
+    """Multi-metric grouped bar chart comparing all 5 algorithms side by side."""
     metrics = ["Accuracy", "Precision", "Recall", "F1-Score", "ROC-AUC"]
     available_metrics = [m for m in metrics if m in comparison_df.columns]
 
@@ -230,11 +233,11 @@ def plot_model_comparison_bars(comparison_df: pd.DataFrame) -> go.Figure:
     )
 
     palette = [
-        THEME_COLORS["primary"],
-        THEME_COLORS["secondary"],
-        "#8b5cf6",  # Purple
-        "#f59e0b",  # Amber
-        THEME_COLORS["benign"],
+        "#142D4E",  # Deep Navy
+        "#2878C7",  # Medical Blue
+        "#16A6A1",  # Teal Accent
+        "#8B5CF6",  # Purple
+        "#10B981",  # Emerald Green
     ]
 
     fig = px.bar(
@@ -246,14 +249,59 @@ def plot_model_comparison_bars(comparison_df: pd.DataFrame) -> go.Figure:
         text=df_melt["Score"].apply(lambda v: f"{v:.1%}"),
         color_discrete_sequence=palette,
     )
-    fig.update_yaxes(range=[0.75, 1.02])
-    return _apply_theme(fig, "Algorithm Performance Comparison (Test Evaluation)", height=450)
+    fig.update_traces(textposition="outside", textfont=dict(size=10, family="Inter"))
+    fig.update_yaxes(range=[0.75, 1.05])
+    return _apply_theme(fig, "Algorithm Benchmark Comparison (Unseen Test Evaluation)", height=450)
+
+
+def plot_model_radar_comparison(comparison_df: pd.DataFrame) -> go.Figure:
+    """Radar chart comparing models across 5 evaluation dimensions."""
+    metrics = ["Accuracy", "Precision", "Recall", "F1-Score", "ROC-AUC"]
+    available_metrics = [m for m in metrics if m in comparison_df.columns]
+
+    fig = go.Figure()
+
+    colors = ["#2878C7", "#16A6A1", "#142D4E", "#8B5CF6", "#F59E0B"]
+
+    for idx, row in comparison_df.iterrows():
+        values = [row[m] for m in available_metrics]
+        # Close the loop
+        values.append(values[0])
+        radar_metrics = available_metrics + [available_metrics[0]]
+
+        fig.add_trace(
+            go.Scatterpolar(
+                r=values,
+                theta=radar_metrics,
+                fill="toself",
+                name=row["Algorithm"],
+                line=dict(color=colors[idx % len(colors)], width=2),
+                opacity=0.55,
+            )
+        )
+
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(visible=True, range=[0.85, 1.0], tickfont=dict(size=10, color="#253247")),
+            angularaxis=dict(tickfont=dict(size=12, color="#142D4E", family="Inter")),
+        ),
+        showlegend=True,
+        paper_bgcolor="#FFFFFF",
+        height=450,
+        margin=dict(l=40, r=40, t=50, b=40),
+        title=dict(
+            text="<b>Multi-Metric Radar Comparison</b>",
+            font=dict(size=17, family="Inter", color="#142D4E"),
+            x=0.02,
+        ),
+    )
+    return fig
 
 
 def plot_confusion_matrix_heatmap(
-    cm_data: Dict[str, Any], model_name: str = "Best Model"
+    cm_data: Dict[str, Any], model_name: str = "Support Vector Machine"
 ) -> go.Figure:
-    """Confusion matrix heatmap with True Negative, False Positive, FN, TP."""
+    """Confusion matrix heatmap with detailed clinical diagnostic annotations."""
     matrix = cm_data["matrix"]
     z = matrix
     x = ["Predicted Benign", "Predicted Malignant"]
@@ -261,12 +309,12 @@ def plot_confusion_matrix_heatmap(
 
     annotations = [
         [
-            f"<b>TN</b>: {matrix[0][0]}<br>(Correct Benign)",
-            f"<b>FP</b>: {matrix[0][1]}<br>(Type I Error)",
+            f"<b>TN = {matrix[0][0]}</b><br><span style='font-size:11px;color:#5A6E85;'>Correct Benign</span>",
+            f"<b>FP = {matrix[0][1]}</b><br><span style='font-size:11px;color:#E63946;'>Type I Error</span>",
         ],
         [
-            f"<b>FN</b>: {matrix[1][0]}<br>(Critical Miss)",
-            f"<b>TP</b>: {matrix[1][1]}<br>(Correct Malignant)",
+            f"<b>FN = {matrix[1][0]}</b><br><span style='font-size:11px;color:#E63946;'>Critical Miss (Type II)</span>",
+            f"<b>TP = {matrix[1][1]}</b><br><span style='font-size:11px;color:#0E7055;'>Correct Malignant</span>",
         ],
     ]
 
@@ -275,7 +323,7 @@ def plot_confusion_matrix_heatmap(
             z=z,
             x=x,
             y=y,
-            colorscale=[[0.0, "#f8fafc"], [0.5, "#93c5fd"], [1.0, "#1e3a8a"]],
+            colorscale=[[0.0, "#F5F7FA"], [0.5, "#BCE0FD"], [1.0, "#142D4E"]],
             showscale=False,
         )
     )
@@ -287,33 +335,37 @@ def plot_confusion_matrix_heatmap(
                 y=y[i],
                 text=annotations[i][j],
                 showarrow=False,
-                font=dict(size=16, color="#0f172a" if z[i][j] < (np.max(z) * 0.5) else "#ffffff"),
+                font=dict(
+                    size=15,
+                    color="#142D4E" if z[i][j] < (np.max(z) * 0.5) else "#FFFFFF",
+                    family="Inter",
+                ),
             )
 
-    return _apply_theme(fig, f"Confusion Matrix: {model_name}", height=400)
+    return _apply_theme(fig, f"Clinical Confusion Matrix: {model_name}", height=390)
 
 
 def plot_roc_curves(roc_dict: Dict[str, Dict[str, Any]]) -> go.Figure:
     """Plot multi-model ROC curves with baseline random chance line."""
     fig = go.Figure()
 
-    # Diagonal baseline
+    # Diagonal chance baseline
     fig.add_trace(
         go.Scatter(
             x=[0, 1],
             y=[0, 1],
             mode="lines",
-            line=dict(color="#94a3b8", dash="dash"),
+            line=dict(color="#CBD5E1", dash="dash", width=1.5),
             name="Chance Baseline (AUC = 0.50)",
         )
     )
 
     colors = [
-        THEME_COLORS["primary"],
-        THEME_COLORS["secondary"],
-        "#e11d48",  # Rose
-        "#8b5cf6",  # Violet
-        "#10b981",  # Emerald
+        "#142D4E",  # Deep Navy
+        "#2878C7",  # Medical Blue
+        "#16A6A1",  # Teal Accent
+        "#8B5CF6",  # Purple
+        "#E63946",  # Warning Red
     ]
 
     for idx, (algo_name, curve_info) in enumerate(roc_dict.items()):
@@ -321,50 +373,51 @@ def plot_roc_curves(roc_dict: Dict[str, Dict[str, Any]]) -> go.Figure:
         tpr = curve_info["tpr"]
         auc_val = curve_info.get("auc", 0.0)
         color = colors[idx % len(colors)]
+        width = 3.0 if "Support Vector" in algo_name else 1.8
 
         fig.add_trace(
             go.Scatter(
                 x=fpr,
                 y=tpr,
                 mode="lines",
-                line=dict(color=color, width=2.5),
-                name=f"{algo_name} (AUC = {auc_val:.3f})",
+                line=dict(color=color, width=width),
+                name=f"{algo_name} (AUC = {auc_val:.4f})",
             )
         )
 
     fig.update_xaxes(title="False Positive Rate (1 - Specificity)", range=[-0.01, 1.01])
     fig.update_yaxes(title="True Positive Rate (Sensitivity / Recall)", range=[-0.01, 1.05])
 
-    return _apply_theme(fig, "Receiver Operating Characteristic (ROC) Curves", height=450)
+    return _apply_theme(fig, "Receiver Operating Characteristic (ROC) Benchmark", height=450)
 
 
 def plot_prediction_gauge(benign_prob: float, malignant_prob: float) -> go.Figure:
-    """Indicator Gauge chart visualizing model classification probability with high contrast."""
-    bar_color = "#dc2626" if malignant_prob >= 0.5 else "#16a34a"
+    """Indicator Gauge chart visualizing model classification probability."""
+    bar_color = "#E63946" if malignant_prob >= 0.5 else "#10B981"
     fig = go.Figure(
         go.Indicator(
             mode="gauge+number",
             value=malignant_prob * 100,
-            title={"text": "<b>Malignancy Probability (%)</b>", "font": {"size": 18, "color": "#0f172a"}},
-            number={"suffix": "%", "font": {"size": 36, "color": "#0f172a"}},
+            title={"text": "<b>Malignancy Risk Probability</b>", "font": {"size": 17, "color": "#142D4E", "family": "Inter"}},
+            number={"suffix": "%", "font": {"size": 38, "color": "#142D4E", "family": "Inter"}},
             gauge={
-                "axis": {"range": [0, 100], "tickwidth": 2, "tickcolor": "#0f172a", "tickfont": {"size": 13, "color": "#0f172a"}},
-                "bar": {"color": bar_color, "thickness": 0.3},
-                "bgcolor": "#ffffff",
-                "borderwidth": 2,
-                "bordercolor": "#cbd5e1",
+                "axis": {"range": [0, 100], "tickwidth": 1.5, "tickcolor": "#5A6E85", "tickfont": {"size": 11, "color": "#5A6E85"}},
+                "bar": {"color": bar_color, "thickness": 0.28},
+                "bgcolor": "#FFFFFF",
+                "borderwidth": 1,
+                "bordercolor": "#E2E8F0",
                 "steps": [
-                    {"range": [0, 40], "color": "#dcfce7"},
-                    {"range": [40, 60], "color": "#fef9c3"},
-                    {"range": [60, 100], "color": "#fee2e2"},
+                    {"range": [0, 35], "color": "#E8F8F5"},
+                    {"range": [35, 65], "color": "#FEF9C3"},
+                    {"range": [65, 100], "color": "#FEE8E8"},
                 ],
                 "threshold": {
-                    "line": {"color": "#b91c1c", "width": 5},
+                    "line": {"color": "#921E28", "width": 4},
                     "thickness": 0.85,
                     "value": 50,
                 },
             },
         )
     )
-    fig.update_layout(height=280, margin={"l": 25, "r": 25, "t": 45, "b": 25}, paper_bgcolor="#ffffff")
+    fig.update_layout(height=270, margin={"l": 25, "r": 25, "t": 45, "b": 25}, paper_bgcolor="#FFFFFF")
     return fig

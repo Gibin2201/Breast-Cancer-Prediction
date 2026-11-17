@@ -53,10 +53,14 @@ Breast-Cancer-Prediction/
 │
 ├── pages/
 │   ├── 1_Dashboard.py          # Clinical telemetry, class distributions & model status
-│   ├── 2_Dataset_Analysis.py   # Exploratory Data Analysis (EDA), heatmaps, boxplots
-│   ├── 3_Model_Comparison.py   # Benchmark tournament, confusion matrices, ROC curves
-│   ├── 4_Breast_Cancer_Prediction.py # 30-feature real-time inference form & risk gauge
-│   └── 5_About_Project.py      # Academic defense brief, mathematical formulations
+│   ├── 2_Dataset_Overview.py   # Dataset specifications, df.head(5), df.tail(5), stats
+│   ├── 3_Dataset_Analysis.py   # Exploratory Data Analysis (EDA), heatmaps, boxplots
+│   ├── 4_Data_Preprocessing.py # Interactive 6-step preprocessing pipeline & scaling
+│   ├── 5_Machine_Learning_Models.py # 5 algorithm profiles, formulas & hyperparameters
+│   ├── 6_Model_Comparison.py   # Benchmark leaderboard, grouped bar chart, radar chart
+│   ├── 7_Performance_Evaluation.py # Confusion matrices, multi-ROC curves, clinical recall
+│   ├── 8_Prediction.py         # 30-feature real-time inference form & risk gauge
+│   └── 9_About_Project.py      # Academic defense brief, mathematical formulations
 │
 ├── utils/
 │   ├── __init__.py             # Python utility package descriptor
