@@ -11,7 +11,7 @@ print(df.head())
 print("\nDATASET SHAPE")
 print(df.shape)
 
-# Display column name
+# Display column names
 print("\nCOLUMN NAMES")
 print(df.columns)
 
