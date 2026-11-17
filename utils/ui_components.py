@@ -377,6 +377,117 @@ CUSTOM_CSS = """
         padding-bottom: 10px;
     }
 
+    /* Algorithm Podium / Leaderboard Cards */
+    .podium-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    @media (max-width: 992px) {
+        .podium-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 576px) {
+        .podium-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    .podium-card {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 16px 14px;
+        box-shadow: 0 2px 10px rgba(20, 45, 78, 0.03);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        text-align: center;
+    }
+    .podium-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 22px rgba(20, 45, 78, 0.09);
+        border-color: #2878C7;
+    }
+    .podium-card-gold {
+        border: 2px solid #F59E0B !important;
+        background: linear-gradient(180deg, #FFFDF5 0%, #FFFFFF 100%) !important;
+        box-shadow: 0 4px 18px rgba(245, 158, 11, 0.14) !important;
+    }
+    .podium-rank {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        font-weight: 800;
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+    }
+    .podium-rank-gold {
+        background: #FEF3C7;
+        color: #D97706;
+    }
+    .podium-rank-silver {
+        background: #E2E8F0;
+        color: #475569;
+    }
+    .podium-rank-bronze {
+        background: #FFEDD5;
+        color: #C2410C;
+    }
+    .podium-rank-standard {
+        background: #F1F5F9;
+        color: #64748B;
+    }
+
+    /* Morphological Differential Comparison Meters */
+    .morph-item {
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 10px;
+        transition: border-color 0.15s ease;
+    }
+    .morph-item:hover {
+        border-color: #2878C7;
+        background: #FFFFFF;
+    }
+    .morph-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+    }
+    .morph-title {
+        font-size: 0.86rem;
+        font-weight: 700;
+        color: #142D4E;
+    }
+    .morph-badge {
+        font-size: 0.74rem;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 6px;
+    }
+    .morph-badge-red {
+        background: #FEE2E2;
+        color: #DC2626;
+    }
+    .morph-bar-wrap {
+        height: 7px;
+        background: #E2E8F0;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 6px;
+    }
+    .morph-bar-fill {
+        height: 100%;
+        border-radius: 10px;
+    }
+
     /* Website Feature Tile / Module Card */
     .feature-tile {
         background: #FFFFFF;
@@ -777,10 +888,15 @@ def render_metric_card(
     icon: str = "",
 ) -> str:
     """Render a premium healthcare SaaS metric card with clean typography and accent stripe."""
-    icon_html = f"<span style='font-size: 1.15rem; margin-right: 4px;'>{icon}</span>" if icon else ""
+    icon_html = (
+        f"""<div style="width: 36px; height: 36px; border-radius: 10px; background: {delta_color}18; display: inline-flex; align-items: center; justify-content: center; font-size: 1.15rem;">
+            {icon}
+        </div>"""
+        if icon
+        else ""
+    )
     return f"""
-    <div class="metric-card-saas">
-        <div class="metric-card-stripe" style="background-color: {delta_color};"></div>
+    <div class="metric-card-saas" style="border-top: 3px solid {delta_color};">
         <div class="metric-label-saas">
             <span>{title}</span>
             {icon_html}
@@ -788,6 +904,9 @@ def render_metric_card(
         <div class="metric-value-saas">{value}</div>
         <div class="metric-subtext-saas" style="color: {delta_color};">
             {subtext}
+        </div>
+        <div style="height: 3px; background: #F1F5F9; border-radius: 2px; margin-top: 10px; overflow: hidden;">
+            <div style="height: 100%; width: 100%; background: {delta_color}; border-radius: 2px; opacity: 0.85;"></div>
         </div>
     </div>
     """
