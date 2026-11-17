@@ -1,3 +1,15 @@
+---
+title: Breast Cancer Prediction AI Platform
+emoji: 🎗️
+colorFrom: blue
+colorTo: indigo
+sdk: streamlit
+sdk_version: "1.32.0"
+app_file: app.py
+pinned: false
+license: mit
+---
+
 # Breast Cancer Prediction Using Machine Learning
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
