@@ -12,6 +12,7 @@ from utils.ui_components import (
     render_top_navbar,
     render_header,
     render_sidebar,
+    render_website_footer,
 )
 
 
@@ -220,6 +221,8 @@ def main():
             """,
             unsafe_allow_html=True,
         )
+
+    render_website_footer()
 
 
 if __name__ == "__main__":

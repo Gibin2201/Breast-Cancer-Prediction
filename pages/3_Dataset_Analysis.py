@@ -19,6 +19,7 @@ from utils.ui_components import (
     render_top_navbar,
     render_header,
     render_sidebar,
+    render_website_footer,
 )
 from utils.data_loader import load_dataset
 from utils.visualization import (
@@ -186,6 +187,8 @@ def main():
 
         fig_scatter = plot_scatter_features(df, x_feat, y_feat)
         st.plotly_chart(fig_scatter, use_container_width=True)
+
+    render_website_footer()
 
 
 if __name__ == "__main__":

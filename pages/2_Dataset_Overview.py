@@ -25,6 +25,7 @@ from utils.ui_components import (
     render_header,
     render_sidebar,
     render_metric_card,
+    render_website_footer,
 )
 from utils.data_loader import load_dataset, get_dataset_metadata
 from download_dataset import load_source_metadata
@@ -256,6 +257,8 @@ def main():
     )
     desc_df = df[FEATURE_NAMES].describe().T
     st.dataframe(desc_df.style.format("{:.3f}"), use_container_width=True, height=360)
+
+    render_website_footer()
 
 
 if __name__ == "__main__":

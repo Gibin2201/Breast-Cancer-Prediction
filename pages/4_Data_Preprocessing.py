@@ -23,6 +23,7 @@ from utils.ui_components import (
     render_header,
     render_sidebar,
     render_metric_card,
+    render_website_footer,
 )
 from utils.data_loader import load_dataset
 from utils.preprocessing import (
@@ -264,6 +265,8 @@ raw_df.columns = [TARGET_COLUMN] + FEATURE_NAMES  # Standardizes headers</pre>
             """,
             unsafe_allow_html=True,
         )
+
+    render_website_footer()
 
 
 if __name__ == "__main__":

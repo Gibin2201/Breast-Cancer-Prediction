@@ -21,6 +21,7 @@ from utils.ui_components import (
     render_header,
     render_sidebar,
     render_metric_card,
+    render_website_footer,
 )
 from utils.prediction import load_model_metadata
 
@@ -261,6 +262,8 @@ def main():
                 )
                 st.markdown("##### 🩺 Clinical Suitability")
                 st.caption(profile.get("clinical_suitability", ""))
+
+    render_website_footer()
 
 
 if __name__ == "__main__":

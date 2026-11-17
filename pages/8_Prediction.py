@@ -30,6 +30,7 @@ from utils.ui_components import (
     render_sidebar,
     check_and_guide_setup,
     render_metric_card,
+    render_website_footer,
 )
 from utils.data_loader import load_dataset, get_sample_records
 from utils.prediction import predict_tumor, load_model_metadata
@@ -300,6 +301,8 @@ def main():
             """,
             unsafe_allow_html=True,
         )
+
+    render_website_footer()
 
 
 if __name__ == "__main__":

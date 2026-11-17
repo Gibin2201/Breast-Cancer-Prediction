@@ -20,6 +20,7 @@ from utils.ui_components import (
     render_header,
     render_sidebar,
     render_metric_card,
+    render_website_footer,
 )
 from utils.prediction import load_model_metadata
 from utils.visualization import (
@@ -158,6 +159,8 @@ def main():
             )
         else:
             st.info("ROC telemetry loaded.")
+
+    render_website_footer()
 
 
 if __name__ == "__main__":
